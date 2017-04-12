@@ -84,7 +84,7 @@ class SimpleRWA(Recurrent):
     """
     @interfaces.legacy_recurrent_support
     def __init__(self, units,
-                 activation='linear',  #'tanh',
+                 activation='tanh',
                  recurrent_activation='tanh',
                  use_bias=True,
                  kernel_initializer='glorot_uniform',
@@ -121,7 +121,7 @@ class SimpleRWA(Recurrent):
         self.recurrent_constraint = constraints.get(recurrent_constraint)
         self.bias_constraint = constraints.get(bias_constraint)
 
-        self.dropout = min(1., max(0., dropout))
+        self.dropout = min(1., max(0., dropout))  # type: float
         self.recurrent_dropout = min(1., max(0., recurrent_dropout))
 
     def build(self, input_shape):
@@ -202,7 +202,7 @@ class SimpleRWA(Recurrent):
 
     def get_constants(self, inputs, training=None):
         constants = []
-        if self.implementation == 0 and 0 < self.dropout < 1:
+        if self.implementation == 0 and 0. < self.dropout < 1.:
             input_shape = K.int_shape(inputs)
             input_dim = input_shape[-1]
             ones = K.ones_like(K.reshape(inputs[:, 0, 0], (-1, 1)))
@@ -218,7 +218,7 @@ class SimpleRWA(Recurrent):
         else:
             constants.append([K.cast_to_floatx(1.) for _ in range(3)])
 
-        if 0 < self.recurrent_dropout < 1:
+        if 0. < self.recurrent_dropout < 1.:
             ones = K.ones_like(K.reshape(inputs[:, 0, 0], (-1, 1)))
             ones = K.tile(ones, (1, self.units))
 
@@ -308,7 +308,7 @@ class SimpleRWA(Recurrent):
             # TODO how to implement this? Is it needed?
             h = new_h
 
-        if 0 < self.dropout + self.recurrent_dropout:
+        if 0. < self.dropout + self.recurrent_dropout:
             h._uses_learning_phase = True
 
         return h, [max_a, n, d, h]

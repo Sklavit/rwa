@@ -33,20 +33,3 @@ class Dataset:
     def batch(self, batch_size):
         js = np.random.randint(0, self.num_samples, batch_size)
         return self.xs[js, :, :], self.ls[js], self.ys[js]
-
-
-##########################################################################################
-# Import dataset
-##########################################################################################
-
-# Load data
-#
-import sys
-
-# sys.path.append('../dataset')
-import input_data
-
-# Create split of data
-#
-train = Dataset(input_data.xs_train, input_data.ls_train, input_data.ys_train)
-test = Dataset(input_data.xs_test, input_data.ls_test, input_data.ys_test)

@@ -14,7 +14,7 @@ import os
 import numpy as np
 import tensorflow as tf
 
-import dataplumbing as dp
+from sklavit import dataplumbing as dp
 
 ##########################################################################################
 # Settings

@@ -5,6 +5,8 @@
 # Purpose: Load dataset or generate it if it does not exist yet.
 # License: For legal information see LICENSE in the home directory.
 ##########################################################################################
+# CODE HEAVILY MODIFIED BY Sergii Nechuiviter (@sklavit) snechuiviter@gmail.com
+# @date 2017-04-13
 
 ##########################################################################################
 # Libraries

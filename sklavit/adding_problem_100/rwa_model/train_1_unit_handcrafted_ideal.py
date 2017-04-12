@@ -15,12 +15,15 @@
 
 from pprint import pprint
 
+import numpy
+
+from dataplumbing import Dataset
+from keras import backend as K
 from keras import optimizers
 from keras.layers import Dense
 from keras.models import Sequential
 
 from adding_problem_100 import dataset
-from dataplumbing import Dataset
 from simple_keras_rwa import SimpleRWA
 ##########################################################################################
 # Settings
@@ -65,11 +68,24 @@ model.compile(loss='mean_squared_error', optimizer=optimizers.Adam(lr=learning_r
 # Train
 ##########################################################################################
 
-history = model.fit(train.xs, train.ys,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=2,
-                    validation_data=(test.xs, test.ys))
+weights = [('simple_rwa_1/kernel',           numpy.array([[1.0        ,  0.00000000,  0.00000000],
+                                                          [0.000000000,100.00000000, 15.00000000]], dtype=numpy.float32)),
+           ('simple_rwa_1/recurrent_kernel', numpy.array([[ 0.00000000,  0.00000000]], dtype=numpy.float32)),
+           ('simple_rwa_1/bias',             numpy.array( [ 0.00000000,  0.00000000], dtype=numpy.float32)),
+           ('dense_1/kernel',                numpy.array([[ 2.00000000]], dtype=numpy.float32)),
+           ('dense_1/bias',                  numpy.array([ 0.00000000], dtype=numpy.float32))]
+
+model.set_weights([w[1] for w in weights])
+
+predict = model.predict(test.xs[0, :, :].reshape(1, -1, 2))
+
+print("X")
+print(test.xs[0, :, :].reshape(1, -1, 2))
+print("Predict")
+pprint(predict)
+
+print("Weights")
+pprint(list(zip(model.weights, model.get_weights())))
 
 score = model.evaluate(test.xs, test.ys)
 print('Test score:')
