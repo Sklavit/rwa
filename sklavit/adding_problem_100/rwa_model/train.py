@@ -40,7 +40,7 @@ num_classes = train.num_classes
 
 # Training parameters
 #
-num_iterations = 50000 / 10.0
+num_iterations = 50000 / 1.0
 batch_size = 100
 epochs = int(num_iterations / (train.num_samples / batch_size))
 learning_rate = 0.001
@@ -71,6 +71,6 @@ history = model.fit(train.xs, train.ys,
                     verbose=2,
                     validation_data=(test.xs, test.ys))
 
-score = model.evaluate(test.xs, test.ys)
+score = model.evaluate(test.xs, test.ys, batch_size=batch_size)
 print('Test score:')
 pprint(score)
